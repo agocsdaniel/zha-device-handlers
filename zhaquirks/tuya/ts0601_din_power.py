@@ -261,17 +261,16 @@ class ZemismartPowerMeasurement(LocalDataCluster, ElectricalMeasurement):
         self._update_attribute(self.phase_attributes[phase]["power"], power)
 
         apparent_power = voltage * current / 10000
-        if apparent_power == 0:
-            power_factor = (power + 0.0001) / (apparent_power + 0.0001) * 100
-        else:
+        if apparent_power != 0:
             power_factor = power / apparent_power * 100
+            self._update_attribute(
+                self.phase_attributes[phase]["power_factor"], power_factor
+            )
 
         self._update_attribute(
             self.phase_attributes[phase]["apparent_power"], apparent_power
         )
-        self._update_attribute(
-            self.phase_attributes[phase]["power_factor"], power_factor
-        )
+
 
 
 class ZemismartElectricalMeasurement(TuyaElectricalMeasurement):
